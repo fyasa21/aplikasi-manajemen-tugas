@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoginScreen();
         return;
     }
-
+    Storage.getData();
     initNavigation();
     initMobileMenu();
     initDragAndDrop();
@@ -99,6 +99,9 @@ function initNavigation() {
 function initMobileMenu() {
     const menuToggle = document.getElementById('btnMenuToggle');
     const sidebar = document.querySelector('.sidebar');
+
+    if (!menuToggle || !sidebar) return;
+
     menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('open');
     });
@@ -106,7 +109,8 @@ function initMobileMenu() {
 
 function initDragAndDrop() {
     const contentView = document.getElementById('contentView');
-
+    if (!contentView) return;
+    
     contentView.addEventListener('dragover', (e) => {
         if (e.target.closest('.kanban-col')) {
             e.preventDefault();
@@ -141,6 +145,7 @@ function initDragAndDrop() {
 function loadView(viewName) {
     const contentView = document.getElementById('contentView');
     const pageTitle = document.getElementById('pageTitle');
+    if (!contentView || !pageTitle) return;
 
     const titles = {
         'dashboard': 'Dashboard',
