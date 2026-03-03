@@ -1,7 +1,7 @@
-# Student Task Manager
+# Aplikasi Manajemen Tugas
 
 ## 📌 Deskripsi
-Student Task Manager adalah aplikasi sederhana untuk membantu mahasiswa mencatat dan mengelola tugas kuliah. Aplikasi ini dibuat sebagai proyek praktikum mata kuliah Rancang Bangun Perangkat Lunak dengan menerapkan version control Git secara kolaboratif.
+Actask adalah aplikasi manajemen tugas sederhana untuk membantu mahasiswa mencatat dan mengelola tugas kuliah. Aplikasi ini dibuat sebagai proyek praktikum mata kuliah Rancang Bangun Perangkat Lunak dengan menerapkan version control Git secara kolaboratif.
 
 ---
 
