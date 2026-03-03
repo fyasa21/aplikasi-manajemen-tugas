@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actask - Progressive Task Management</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#121212" />
+    <meta name="description" content="A powerful, highly-responsive project and task management application." />
+
+    <!-- Manifest (tetap di root) -->
+    <link rel="manifest" href="./manifest.json" />
+
+    <!-- Styles (karena sekarang ada di src/styles) -->
+    <link rel="stylesheet" href="./src/styles/variables.css" />
+    <link rel="stylesheet" href="./src/styles/main.css" />
+</head>
+
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">▲</span>
+                    <span class="logo-text">Actask</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-view="projects">
+                    Projects
+                </a>
+                <a href="#" class="nav-item" data-view="tasks">
+                    My Tasks
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-primary w-100" id="btnNewTask">
+                    + New Task
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            </header>
+
+            <div class="content-view" id="contentView"></div>
+        </main>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none"></div>
+
+    <!-- Main App Script -->
+    <script type="module" src="./src/app.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            const isLocalhost =
+                location.hostname === "localhost" ||
+                location.hostname === "127.0.0.1";
+
+            window.addEventListener("load", async () => {
+                if (isLocalhost) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) {
+                        await reg.unregister();
+                    }
+                    console.log("SW disabled in development");
+                    return;
+                }
+
+                navigator.serviceWorker
+                    .register("./sw.js")
+                    .then((reg) => console.log("SW registered:", reg))
+                    .catch((err) => console.log("SW failed:", err));
+            });
+        }
+    </script>
+
+    <!-- Auth -->
+    <script type="module">
+        import { Auth } from "./src/auth.js";
+        window.logout = Auth.logout;
+    </script>
+</body>
+
+</html>

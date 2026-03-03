@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Storage Test</title>
+</head>
+<body>
+    <h1>Storage Unit Test</h1>
+
+    <script type="module">
+        import { Storage } from "../src/storage.js";
+
+        console.log("Running Storage Tests...");
+
+        // Reset localStorage sebelum test
+        localStorage.clear();
+
+        // === TEST getData() ===
+        const data = Storage.getData();
+        console.assert(data.tasks.length === 3, "Initial data not loaded properly");
+
+        // === TEST addTask() ===
+        const newTask = Storage.addTask({
+            title: "Test Task",
+            description: "Testing addTask",
+            status: "todo",
+            projectId: "p1"
+        });
+
+        console.assert(newTask.id.startsWith("t_"), "addTask did not generate ID");
+        console.assert(Storage.getTasks().length === 4, "Task not added correctly");
+
+        // === TEST updateTask() ===
+        Storage.updateTask(newTask.id, { status: "done" });
+        const updatedTask = Storage.getTasks().find(t => t.id === newTask.id);
+
+        console.assert(updatedTask.status === "done", "updateTask failed");
+
+        // === TEST deleteTask() ===
+        Storage.deleteTask(newTask.id);
+        const afterDelete = Storage.getTasks().find(t => t.id === newTask.id);
+
+        console.assert(!afterDelete, "deleteTask failed");
+
+        // === TEST getStats() ===
+        const stats = Storage.getStats();
+        console.assert(stats.total === 3, "Stats total incorrect");
+        console.assert(typeof stats.done === "number", "Stats done invalid");
+        console.assert(typeof stats.pending === "number", "Stats pending invalid");
+
+        console.log("All Storage Tests Passed Successfully!");
+    </script>
+</body>
+</html>

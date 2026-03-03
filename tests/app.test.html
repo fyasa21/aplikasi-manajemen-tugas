@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>App Integration Test</title>
+</head>
+<body>
+
+    <div id="pageTitle"></div>
+    <div id="contentView"></div>
+
+    <button id="btnNewTask"></button>
+    <button id="btnMenuToggle"></button>
+
+    <div class="sidebar"></div>
+
+    <script type="module">
+
+        /* ===== MOCK AUTH ===== */
+        export const Auth = {
+            isLoggedIn: () => true,
+            logout: () => console.log("Logout called"),
+            login: () => true,
+            register: () => ({ ok: true })
+        };
+        window.Auth = Auth;
+
+        /* ===== MOCK STORAGE ===== */
+        export const Storage = {
+            getTasks: () => [
+                { id: "1", title: "Task 1", status: "todo", deadline: "2025-12-01" },
+                { id: "2", title: "Task 2", status: "done", deadline: "2025-11-01" }
+            ],
+            updateTask: (id, data) => {
+                console.log("updateTask called", id, data);
+            }
+        };
+        window.Storage = Storage;
+
+        /* ===== MOCK UI ===== */
+        export const UI = {
+            renderDashboard: (el) => el.innerHTML = "Dashboard Rendered",
+            renderKanban: (el) => el.innerHTML = "Kanban Rendered",
+            createTaskListItem: (t) => <div class="task">${t.title}</div>,
+            openTaskModal: () => console.log("Modal opened")
+        };
+        window.UI = UI;
+
+    </script>
+
+    <script type="module">
+
+        // Import app.js setelah mock tersedia
+        import "../src/app.js";
+
+        // Simulasi DOMContentLoaded
+        document.dispatchEvent(new Event("DOMContentLoaded"));
+
+        // === TEST 1: Dashboard Load ===
+        console.assert(
+            document.getElementById("pageTitle").textContent === "Dashboard",
+            "Dashboard title failed"
+        );
+
+        // === TEST 2: Tasks View Rendering ===
+        window.refreshCurrentView();
+        const tasksRendered = document.querySelectorAll(".task");
+        console.assert(tasksRendered.length === 2, "Task render failed");
+
+        console.log("App integration test finished successfully");
+
+    </script>
+
+</body>
+</html>
