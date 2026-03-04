@@ -1,6 +1,7 @@
 const SESSION_KEY = "actask_session";
 
 export const Auth = {
+
     login: (username, password) => {
         username = username.trim();
         password = password.trim();
@@ -21,7 +22,7 @@ export const Auth = {
 
         if (!user) return false;
 
-        // Simpan hanya username ke session (lebih aman)
+        // simpan hanya username di session
         localStorage.setItem(
             SESSION_KEY,
             JSON.stringify({ username: user.username })
@@ -31,12 +32,16 @@ export const Auth = {
     },
 
     logout: () => {
-        localStorage.removeItem("actask_session");
+        localStorage.removeItem(SESSION_KEY);
         location.reload();
     },
 
     getUser: () => {
-        return JSON.parse(localStorage.getItem(SESSION_KEY));
+        try {
+            return JSON.parse(localStorage.getItem(SESSION_KEY));
+        } catch {
+            return null;
+        }
     },
 
     isLoggedIn: () => {
@@ -63,8 +68,10 @@ export const Auth = {
         }
 
         users.push({ username, password });
+
         localStorage.setItem("actask_users", JSON.stringify(users));
 
         return { ok: true };
     }
+
 };
