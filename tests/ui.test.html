@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <title>UI Test</title>
+  </head>
+  <body>
+    <h2>UI Rendering Test</h2>
+
+    <div id="app"></div>
+    <div id="modalOverlay"></div>
+
+    <script type="module">
+      import { UI } from "../src/ui.js";
+      import { Storage } from "../src/storage.js";
+
+      Storage.addTask({
+        title: "Test Task",
+        description: "Testing UI",
+        status: "todo",
+        projectId: "p1",
+      });
+
+      const container = document.getElementById("app");
+
+      UI.renderDashboard(container);
+    </script>
+  </body>
+</html>
