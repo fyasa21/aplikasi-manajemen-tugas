@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Auth Test</title>
+  </head>
+  <body>
+    <h2>Auth Test</h2>
+    <button onclick="runTest()">Run Test</button>
+
+    <script type="module">
+      import { Auth } from "../src/auth.js";
+
+      function runTest() {
+        localStorage.clear();
+
+        console.log("TEST REGISTER");
+        console.log(Auth.register("fathir", "123"));
+
+        console.log("TEST LOGIN SUCCESS");
+        console.log(Auth.login("fathir", "123"));
+
+        console.log("TEST SESSION");
+        console.log(Auth.getUser());
+
+        console.log("TEST LOGIN FAIL");
+        console.log(Auth.login("fathir", "salah"));
+      }
+
+      window.runTest = runTest;
+    </script>
+  </body>
+</html>

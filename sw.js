@@ -1,35 +1,62 @@
-const CACHE_NAME = 'actask-v1';
+const CACHE_NAME = 'actask-v3';
+
 const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/styles/variables.css',
-    '/styles/main.css',
-    '/scripts/app.js',
-    '/manifest.json'
+    './',
+    './index.html',
+    './manifest.json',
+
+    './src/app.js',
+    './src/ui.js',
+    './src/storage.js',
+    './src/auth.js',
+
+    './src/styles/variables.css',
+    './src/styles/main.css'
 ];
 
+// INSTALL
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('[Service Worker] Caching all assets');
+            console.log('[SW] Caching assets...');
             return cache.addAll(ASSETS_TO_CACHE);
         })
     );
+    self.skipWaiting();
 });
 
+// ACTIVATE (hapus cache lama)
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((keys) =>
+            Promise.all(
+                keys
+                    .filter((key) => key !== CACHE_NAME)
+                    .map((key) => caches.delete(key))
+            )
+        )
+    );
+    self.clients.claim();
+});
+
+// FETCH
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
-            // Return cached response if found
             if (cachedResponse) {
                 return cachedResponse;
             }
-            // Otherwise, fetch from network
-            return fetch(event.request).catch(() => {
-                // If network fails and request is for an HTML page, we could return a fallback offline page
-                // For now, Actask works mostly client-side
-                console.error('[Service Worker] Fetch failed; returning offline page instead.', event.request.url);
-            });
+
+            return fetch(event.request)
+                .then((response) => {
+                    return response;
+                })
+                .catch(() => {
+                    // fallback minimal kalau offline
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('./index.html');
+                    }
+                });
         })
     );
 });
