@@ -35,7 +35,6 @@ Actask menyediakan beberapa fitur utama:
 ### 🔐 Authentication
 - Register pengguna
 - Login pengguna
-- Logout
 - Session management menggunakan LocalStorage
 
 ### 📋 Kanban Board
